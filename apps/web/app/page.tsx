@@ -1,102 +1,116 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+"use client";
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
+import Image from "next/image";
+import { getRandomBackgroundString } from "../lib/string";
+import { TextScramble } from "@/components/ui/text-scramble";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
+import npm from "@/assets/npm.png";
+import { Input } from "@/components/ui/input";
 
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
+import * as React from "react";
+import {
+  IconCheck,
+  IconCopy,
+  IconInfoCircle,
+  IconStar,
+} from "@tabler/icons-react";
 
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+// import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [trigger, setTrigger] = useState<boolean>(true);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.com/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const [value, setValue] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isCopied) {
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }
+  }, [isCopied]);
+
+  return (
+    <div className="max-w-full">
+      <div
+        className={cn(
+          "max-h-dvh overflow-hidden absolute z-[-1] top-0 left-0 w-full wrap-anywhere transition-colors duration-200",
+          trigger ? "text-[#C12127]" : "text-neutral-200"
+        )}
+      >
+        <TextScramble
+          as="span"
+          trigger={trigger}
+          speed={0.01}
+          className="w-full "
+          onScrambleComplete={() => {
+            setTrigger(false);
+          }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.com?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.com →
-        </a>
-      </footer>
+          {getRandomBackgroundString(6000)}
+        </TextScramble>
+      </div>
+
+      {/* SEARCH BAR */}
+      <div className="max-w-full h-dvh relative flex flex-col items-center justify-center">
+        <AnimatePresence>
+          {!trigger && (
+            <motion.div
+              animate={{ top: 0 }}
+              initial={{ top: 50 }}
+              className="text-black text-3xl absolute h-dvh flex flex-col justify-start py-12 items-center"
+            >
+              <motion.img
+                animate={{ opacity: 100 }}
+                initial={{ opacity: 0 }}
+                src={"/image.png"}
+                alt="npm logo"
+                className="w-md"
+              />
+
+              <div className=" bg-neutral-200 rounded-md w-full mt-8">
+                <div className="text-sm px-1.5 py-1 text-neutral-500">
+                  Add Our MCP!
+                </div>
+                <InputGroup className="bg-white">
+                  <InputGroupInput value="https://npmthing.com/mcp" readOnly />
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      aria-label="Copy"
+                      title="Copy"
+                      size="icon-xs"
+                      onClick={() => {
+                        window.navigator.clipboard.writeText(
+                          "https://npmthing.com/mcp"
+                        );
+                        setIsCopied(true);
+                      }}
+                    >
+                      {isCopied ? <IconCheck /> : <IconCopy />}
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+              </div>
+
+              <Input
+                placeholder="Search for a package..."
+                value={value || ""}
+                onChange={(e) => setValue(e.target.value)}
+                className="bg-white mt-4 py-6 selection:bg-[#C12127]/70"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
