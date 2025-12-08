@@ -1,0 +1,27 @@
+{
+  "name": "mcp",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e ../../.env bun run index.ts --watch"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/turndown": "^5.0.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.53",
+    "@ai-sdk/openai": "^2.0.80",
+    "@hono/mcp": "^0.2.2",
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@openrouter/ai-sdk-provider": "^1.4.1",
+    "ai": "^5.0.108",
+    "exa-js": "^2.0.11",
+    "hono": "^4.10.7",
+    "turndown": "^7.2.2"
+  }
+}
