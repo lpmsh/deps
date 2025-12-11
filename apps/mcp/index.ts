@@ -8,17 +8,12 @@ import type { NPMResponse } from "./lib/types";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateObject } from "ai";
 import TurndownService from "turndown";
-import util from "util";
 
 const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
-console.log("ROUTER KEY: ", process.env.OPEN_ROUTER_API_KEY);
-
-import { openai } from "@ai-sdk/openai";
 import { exa } from "./lib/exa";
-import { writeFile, writeFileSync } from "fs";
 
 const app = new Hono();
 
@@ -113,9 +108,11 @@ mcpServer.registerTool(
 
       const resultsFormatted = {};
 
+      // @ts-ignore
       resultsFormatted[results.results[0].url] = results.results[0].text;
 
       results.results[0]?.subpages.forEach(
+        // @ts-ignore
         (s) => (resultsFormatted[s.url] = s.text)
       );
 
@@ -123,7 +120,14 @@ mcpServer.registerTool(
         content: [
           {
             type: "text",
-            text: Object.entries(resultsFormatted).map(([url, text]) => `${url} - ${text}\n\n`).join("")
+            text: `
+            <package_readme>
+            ${content}
+            </package_readme>
+
+            <documenation_from_website>
+            ${Object.entries(resultsFormatted).map(([url, text]) => `${url} - ${text}\n\n`).join("")}
+            </documentation_from_website>`
           },
         ],
       };
@@ -155,7 +159,7 @@ app.all("/mcp", async (c) => {
 });
 
 export default {
-  port: 3000,
+  port: 3001,
   fetch: app.fetch,
   idleTimeout: 255
 };

@@ -1,3 +1,4 @@
+// generated types
 export interface NPMResponse {
   _id: string;
   _rev: string;

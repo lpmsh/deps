@@ -6,7 +6,7 @@ import { TextScramble } from "@/components/ui/text-scramble";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import npm from "@/assets/npm.png";
+import logo from "@/assets/logo.svg";
 import { Input } from "@/components/ui/input";
 
 import * as React from "react";
@@ -33,11 +33,11 @@ export default function Home() {
 
   const [value, setValue] = useState<string | null>(null);
 
-
   const [results, setResults] = useState<Response | null>(null);
 
   useEffect(() => {
     async function getResults() {
+      if (!value) return;
       const results = await fetch(
         `https://api.npms.io/v2/search?q=${encodeURIComponent(value)}&size=3`
       );
@@ -64,7 +64,7 @@ export default function Home() {
       <div
         className={cn(
           "overflow-hidden absolute z-[-1] top-0 left-0 w-full wrap-anywhere transition-colors duration-200",
-          trigger ? "text-[#C12127]" : "text-neutral-200"
+          trigger ? "text-[#5CF457]" : "text-neutral-200"
         )}
       >
         <TextScramble
@@ -88,25 +88,19 @@ export default function Home() {
               <motion.div
                 animate={{ top: 0 }}
                 initial={{ top: 50 }}
-                className="text-black text-3xl absolute h-dvh flex flex-col justify-start py-12 items-center"
+                className="text-black text-3xl absolute h-dvh flex flex-col justify-start py-12 items-center w-xl"
               >
-                <motion.img
-                  animate={{ opacity: 100 }}
-                  initial={{ opacity: 0 }}
-                  src={"/image.png"}
-                  alt="npm logo"
-                  className="w-md"
-                />
+                <motion.div animate={{ opacity: 100 }} initial={{ opacity: 0 }} className="flex items-center gap-x-2 justify-center w-full">
+                  <Image src={logo} alt="deps logo" className="w-12" />
+                  <h1 className="text-5xl font-semibold">Deps.ai</h1>
+                </motion.div>
 
                 <div className=" bg-neutral-200 rounded-md w-full mt-8">
                   <div className="text-sm px-1.5 py-1 text-neutral-500">
                     Add Our MCP!
                   </div>
                   <InputGroup className="bg-white">
-                    <InputGroupInput
-                      value="https://npmthing.com/mcp"
-                      readOnly
-                    />
+                    <InputGroupInput value="https://deps.ai/mcp" readOnly />
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
                         aria-label="Copy"
@@ -114,7 +108,7 @@ export default function Home() {
                         size="icon-xs"
                         onClick={() => {
                           window.navigator.clipboard.writeText(
-                            "https://npmthing.com/mcp"
+                            "https://deps.ai/mcp"
                           );
                           setIsCopied(true);
                         }}
@@ -129,7 +123,7 @@ export default function Home() {
                   placeholder="Search for a package..."
                   value={value || ""}
                   onChange={(e) => setValue(e.target.value)}
-                  className="bg-white mt-4 py-6 selection:bg-[#C12127]/70"
+                  className="bg-white mt-4 py-6 selection:bg-[#5CF457]/70"
                 />
 
                 {results && (
