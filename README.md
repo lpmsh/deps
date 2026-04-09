@@ -2,7 +2,7 @@
 
 See the demo [here](https://youtu.be/TRZGCzJGGUU)
 
-I built this for a class project but think the idea is really interesting.
+I built this for a class project but think the idea is interesting.
 
 Deps is an MCP server that allows coding agents to access NPM package Github and Web docs. 
 
